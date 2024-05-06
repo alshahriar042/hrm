@@ -10,7 +10,7 @@
 
             <!-- Left Menu Start -->
             <ul class="metismenu" id="side-menu">
-                <li class="menu-title">Dashboard</li>
+                {{-- <li class="menu-title">Dashboard</li>
                 <li>
                     <a href="{{ route('dashboard') }}" class="waves-effect">
                         <i class="icon-accelerator"></i><span> Dashboard </span>
@@ -28,7 +28,7 @@
                             <span> Role</span>
                         </a>
                     </li>
-                @endif
+                @endif --}}
 
                 @if (Auth::user()->hasPermission('users.index'))
                     <li class="{{ $route == 'users.edit' || $route == 'users.create' || $route == 'users.show' ? 'mm-active' : '' }}">
@@ -71,7 +71,7 @@
                 </li>
                 @endif
 
-
+{{--
                 @if (Auth::user()->hasPermission('reconciliations.index') || Auth::user()->hasPermission('reconciliations.create') || Auth::user()->hasPermission('pending.reconciliation'))
                 <li class="{{ $route == 'reconciliations.index' || $route == 'reconciliations.create' || $route == 'pending.reconciliation' ? 'mm-active' : '' }}">
                     <a href="javascript:void(0);" class="waves-effect {{ $route == 'reconciliations.index' || $route == 'reconciliations.create' || $route == 'pending.reconciliation' ? 'mm-active' : '' }}">
@@ -110,8 +110,8 @@
                         <i class="icon-diamond"></i>
                         <span> Department</span>
                     </a>
-                </li>
-                @endif
+                </li> --}}
+                {{-- @endif --}}
             </ul>
         </div>
         <!-- Sidebar -->

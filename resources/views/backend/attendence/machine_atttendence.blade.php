@@ -28,6 +28,7 @@
                                         <th class="text-center">Name</th>
                                         <th class="text-center">Check in</th>
                                         <th class="text-center">Check out</th>
+                                        <th class="text-center">Total Hours</th>
 
                                     </tr>
                                 </thead>
@@ -41,8 +42,20 @@
                                             <td class="text-center">
                                                 {{ $employee->check_out ? date('d-M-Y h:i A', strtotime(@$employee->check_out)) : 'N/A' }}
                                             </td>
-
-                                            {{-- {{ date('d-M-Y h:i A', strtotime(@$employee->check_in)) }} --}}
+                                            <td class="text-center">
+                                                @if ($employee->check_out)
+                                                    <?php
+                                                    $checkIn = strtotime($employee->check_in);
+                                                    $checkOut = strtotime($employee->check_out);
+                                                    $diffInSeconds = $checkOut - $checkIn;
+                                                    $diffInHours = floor($diffInSeconds / 3600); // Get the whole hours
+                                                    $diffInMinutes = round(($diffInSeconds % 3600) / 60); // Round the remaining minutes
+                                                    echo $diffInHours . 'h ' . $diffInMinutes . 'm'; // Display the difference in hours and minutes
+                                                    ?>
+                                                @else
+                                                    N/A
+                                                @endif
+                                            </td>
                                         </tr>
                                     @endforeach
                                 </tbody>
