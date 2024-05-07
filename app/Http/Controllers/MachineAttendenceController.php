@@ -44,7 +44,8 @@ class MachineAttendenceController extends Controller
 
     public function index()
     {
-        $zk = new ZKTeco('10.10.10.32');
+        $zk = new ZKTeco('203.96.226.122');
+        // $zk = new ZKTeco('10.10.10.32');
 
         if ($zk->connect()) {
 
@@ -109,7 +110,11 @@ class MachineAttendenceController extends Controller
             }
 
             return response()->json(['message' => 'Attendance data inserted successfully'], 200);
+        }else{
+            return response()->json(['message' => 'Not Connect'], 422);
+
         }
+
     }
 
 
