@@ -56,7 +56,7 @@
                                                 @endif
                                             </td>
                                             <td class="text-center">
-                                                @if ($employee->check_out)
+                                                @if ($employee->check_out && $employee->check_in)
                                                     <?php
                                                     $checkIn = strtotime($employee->check_in);
                                                     $checkOut = strtotime($employee->check_out);
