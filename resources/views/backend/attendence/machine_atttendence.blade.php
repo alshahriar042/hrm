@@ -26,6 +26,7 @@
                                     <tr>
                                         <th class="text-center">#SL</th>
                                         <th class="text-center">Name</th>
+                                        <th class="text-center">Date</th>
                                         <th class="text-center">Check in</th>
                                         <th class="text-center">Check out</th>
                                         <th class="text-center">Total Hours</th>
@@ -37,10 +38,22 @@
                                         <tr>
                                             <td class="text-center text-muted">#{{ $key + 1 }}</td>
                                             <td class="text-center">{{ $employee->user_name }}</td>
+                                            <td class="text-center">{{ $employee->date ? date('d-M-Y', strtotime(@$employee->date)) : 'N/A' }}
+                                            </td>
                                             <td class="text-center">
-                                                {{ date('d-M-Y h:i A', strtotime(@$employee->check_in)) }}</td>
+                                                {{ $employee->check_in ? date('h:i A', strtotime(@$employee->check_in)) : 'N/A' }}
+                                                @if ($employee->check_in_remark)
+
+                                                - ({{ $employee->check_in_remark }})
+
+                                                @endif
                                             <td class="text-center">
-                                                {{ $employee->check_out ? date('d-M-Y h:i A', strtotime(@$employee->check_out)) : 'N/A' }}
+                                                {{ $employee->check_out ? date('h:i A', strtotime(@$employee->check_out)) : 'N/A' }}
+                                                @if ($employee->check_out_remark)
+
+                                                - ({{ $employee->check_out_remark }})
+
+                                                @endif
                                             </td>
                                             <td class="text-center">
                                                 @if ($employee->check_out)
