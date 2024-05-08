@@ -21,18 +21,16 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        $schedule->command('user:record')->hourlyAt(6)->unless(function () {
+        $schedule->command('user:record')->hourlyAt(6) ->skip(function () {
             return in_array(date('l'), ['Friday', 'Saturday']);
         });
 
-        $schedule->command('attendence:process')
-        ->unless(function () {
-            return in_array(date('l'), ['Friday', 'Saturday']);
-        })
-        ->everyFiveMinutes()
-        ->between('8:30', '11:30')
-        ->between('17:30', '20:00');
 
+        $schedule->command('attendence:process')
+             ->everyTenMinutes()
+             ->skip(function () {
+                 return in_array(date('l'), ['Friday', 'Saturday']);
+             });
 
     }
 
