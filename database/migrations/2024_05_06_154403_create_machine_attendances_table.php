@@ -18,7 +18,10 @@ return new class extends Migration
             $table->unsignedBigInteger('user_id')->nullable();
             $table->string('user_name')->nullable();
             $table->dateTime('check_in')->nullable();
+            $table->string('check_in_remark')->nullable();
             $table->dateTime('check_out')->nullable();
+            $table->string('check_out_remark')->nullable();
+            $table->date('date')->nullable();
             $table->timestamps();
         });
     }

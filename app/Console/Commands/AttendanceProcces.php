@@ -1,21 +1,35 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Console\Commands;
 
 use Carbon\Carbon;
-use App\Models\User;
-
-
 use Rats\Zkteco\Lib\ZKTeco;
-use Illuminate\Http\Request;
+use Illuminate\Console\Command;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
-class MachineAttendenceController extends Controller
+class AttendanceProcces extends Command
 {
+    /**
+     * The name and signature of the console command.
+     *
+     * @var string
+     */
+    protected $signature = 'attendence:process';
 
+    /**
+     * The console command description.
+     *
+     * @var string
+     */
+    protected $description = 'Attendance process';
 
-    public function index()
+    /**
+     * Execute the console command.
+     *
+     * @return int
+     */
+    public function handle()
     {
         $zk = new ZKTeco('203.96.226.122', 8000);
 
@@ -51,45 +65,13 @@ class MachineAttendenceController extends Controller
                     }
                 }
             }
-            return response()->json(['message' => 'Attendance data inserted successfully'], 200);
 
-
-        }else{
-            return response()->json(['message' => 'Machine Not Connected'], 422);
-
+            $currentDate = Carbon::now()->toDateString();
+            Log::info("Attendance records updated successfully for date: $currentDate.");
+            $this->info('Attendance records updated successfully.');
         }
-
-
+          $currentDate = Carbon::now()->toDateString();
+            Log::info("Attendance records failled update for date: $currentDate.");
+            $this->info('Attendance records failled to update.');
     }
-
-
-    public function userRecord(){
-        $date = Carbon::now()->toDateString();
-        $users = User::where('id', '!=', 1)->get();
-
-        foreach ($users as $user) {
-
-            $existingAttendance = DB::table('machine_attendances')
-            ->where('user_id', $user->emp_id)
-            ->where('date', $date)
-            ->exists();
-
-            if ($existingAttendance) {
-                continue;
-            }
-
-            DB::table('machine_attendances')->insert([
-                'user_id' => $user->emp_id,
-                'user_name' => $user->name,
-                'check_in' => null,
-                'check_out' => null,
-                'date' => $date,
-            ]);
-        }
-
-        return response()->json(['message' => 'Attendance table populated with user data'], 200);
-
-    }
-
-
 }

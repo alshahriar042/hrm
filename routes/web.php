@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Artisan;
 use App\Http\Controllers\Frontend\HomeController;
 use App\Http\Controllers\MachineAttendenceController;
 
@@ -21,4 +22,6 @@ Route::get('/', function () {
 
 
 
-Route::get('/att', [MachineAttendenceController::class, 'index'])->name('attendence');
+Route::get('/record', [MachineAttendenceController::class, 'userRecord'])->name('userRecord.attendence');
+Route::get('/attendence', [MachineAttendenceController::class, 'index'])->name('attendence');
+
