@@ -70,8 +70,6 @@ class AttendanceProcces extends Command
             Log::info("Attendance records updated successfully for date: $currentDate.");
             $this->info('Attendance records updated successfully.');
         }
-          $currentDate = Carbon::now()->toDateString();
-            Log::info("Attendance records failled update for date: $currentDate.");
-            $this->info('Attendance records failled to update.');
+
     }
 }
