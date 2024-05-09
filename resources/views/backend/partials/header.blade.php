@@ -53,7 +53,7 @@
 
         <ul class="list-inline menu-left mb-0">
             <li class="float-left">
-                <button class="button-menu-mobile open-left waves-effect">
+                <button  id="openSidebar" class="button-menu-mobile open-left waves-effect d-block d-lg-none ">
                     <i class="mdi mdi-menu"></i>
                 </button>
             </li>

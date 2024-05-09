@@ -22,7 +22,8 @@
 
     <!-- DataTables -->
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.css">
-    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/buttons/2.2.2/css/buttons.dataTables.min.css">
+    <link rel="stylesheet" type="text/css"
+        href="https://cdn.datatables.net/buttons/2.2.2/css/buttons.dataTables.min.css">
 
 
 
@@ -31,6 +32,27 @@
     @stack('css')
 
     <link href="{{ asset('css/iziToast.css') }}" rel="stylesheet">
+
+    <style>
+        @media only screen and (max-width: 575px) {
+            .content-page {
+                margin-left: 0px;
+            }
+
+        }
+
+        @media only screen and (min-width: 576px) and (max-width: 767px) {
+            .content-page {
+                margin-left: 0px;
+            }
+        }
+
+        @media only screen and (min-width: 768px) and (max-width: 991px) {
+            .content-page {
+                margin-left: 0px;
+            }
+        }
+    </style>
 </head>
 
 <body>
@@ -64,7 +86,7 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
     <script src="https://cdn.datatables.net/buttons/2.2.2/js/dataTables.buttons.min.js"></script>
-   <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
     <script src="https://cdn.datatables.net/buttons/2.2.2/js/buttons.html5.min.js"></script>
     <script src="https://cdn.datatables.net/buttons/2.2.2/js/buttons.print.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.66/pdfmake.min.js"></script>
@@ -90,6 +112,23 @@
     <script>
         $('.select2').select2({
             width: '100%'
+        });
+
+
+
+        $(document).ready(function() {
+            // Function to open sidebar on mobile
+            $('#openSidebar').click(function() {
+                if ($('.side-menu').hasClass('d-none')) {
+                    $('.side-menu').removeClass('d-none');
+                    $('.side-menu').addClass('d-block');
+
+                } else {
+                    $('.side-menu').addClass('d-none');
+                    $('.side-menu').removeClass('d-block');
+                }
+
+            });
         });
     </script>
 </body>

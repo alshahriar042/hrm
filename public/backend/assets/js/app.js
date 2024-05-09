@@ -17,25 +17,26 @@
             this.$menuItem = $('.has_sub > a')
     };
 
-    MainApp.prototype.intSlimscrollmenu = function () {
-        $('.slimscroll-menu').slimscroll({
-            height: 'auto',
-            position: 'right',
-            size: "7px",
-            color: '#9ea5ab',
-            wheelStep: 5,
-            touchScrollStep: 50
-        });
-    },
-    MainApp.prototype.initSlimscroll = function () {
-        $('.slimscroll').slimscroll({
-            height: 'auto',
-            position: 'right',
-            size: "7px",
-            color: '#9ea5ab',
-            touchScrollStep: 50
-        });
-    },
+    // MainApp.prototype.intSlimscrollmenu = function () {
+
+    //     $('.slimscroll-menu').slimscroll({
+    //         height: 'auto',
+    //         position: 'right',
+    //         size: "7px",
+    //         color: '#9ea5ab',
+    //         wheelStep: 5,
+    //         touchScrollStep: 50
+    //     });
+    // },
+    // MainApp.prototype.initSlimscroll = function () {
+    //     $('.slimscroll').slimscroll({
+    //         height: 'auto',
+    //         position: 'right',
+    //         size: "7px",
+    //         color: '#9ea5ab',
+    //         touchScrollStep: 50
+    //     });
+    // },
 
     MainApp.prototype.initMetisMenu = function () {
         //metis menu
@@ -109,8 +110,8 @@
 
 
     MainApp.prototype.init = function () {
-        this.intSlimscrollmenu();
-        this.initSlimscroll();
+        // this.intSlimscrollmenu();
+        // this.initSlimscroll();
         this.initMetisMenu();
         this.initLeftMenuCollapse();
         this.initEnlarge();

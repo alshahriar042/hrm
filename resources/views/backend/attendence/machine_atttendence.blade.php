@@ -20,7 +20,8 @@
                 <div class="col-12">
                     <div class="card m-b-30">
                         <div class="card-body">
-                            <table id="datatable" class="table table-bordered dt-responsive nowrap"
+                            <div class="table-responsive">
+                                <table id="datatable" class="table table-bordered dt-responsive nowrap"
                                 style="border-collapse: collapse; border-spacing: 0; width: 100%;">
                                 <thead>
                                     <tr>
@@ -73,6 +74,8 @@
                                     @endforeach
                                 </tbody>
                             </table>
+                            </div>
+
                         </div>
                     </div>
                 </div> <!-- end col -->
