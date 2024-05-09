@@ -28,7 +28,6 @@ class AttendanceController extends Controller
         // Gate::authorize('attendance.index');
 
             $data = DB::table('machine_attendances')->orderBy('date','DESC') ->get();
-
              return view('backend.attendence.machine_atttendence', compact('data'));
     }
 
@@ -43,7 +42,6 @@ class AttendanceController extends Controller
                         ->orderBy('year', 'desc')
                         ->orderBy('month', 'desc')
                         ->get();
-
         return view('backend.attendence.attendence_details', compact('attendances','employeeId'));
     }
 
