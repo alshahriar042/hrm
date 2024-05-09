@@ -26,9 +26,9 @@ class Kernel extends ConsoleKernel
             return in_array(date('l'), ['Friday', 'Saturday']);
         });
 
-
+//T
         $schedule->command('attendence:process')
-             ->everyMinute()
+             ->everyFiveMinutes()
              ->skip(function () {
                  return in_array(date('l'), ['Friday', 'Saturday']);
              });
