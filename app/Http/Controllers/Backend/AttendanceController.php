@@ -27,7 +27,15 @@ class AttendanceController extends Controller
     {
         // Gate::authorize('attendance.index');
 
-            $data = DB::table('machine_attendances')->orderBy('date','DESC') ->get();
+         $user = Auth::user();
+
+        if ($user->role_id == 2) {
+            $data = DB::table('machine_attendances')->where('user_id',$user->emp_id)->orderBy('date','DESC') ->get();
+        }else{
+
+              $data = DB::table('machine_attendances')->orderBy('date','DESC') ->get();
+        }
+
              return view('backend.attendence.machine_atttendence', compact('data'));
     }
 

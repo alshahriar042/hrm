@@ -43,7 +43,7 @@
             <!-- end page-title -->
 
             @if (Auth::user()->role_id == 1)
-            <div class="row">
+            {{-- <div class="row">
 
                 <div class="col-sm-6 col-xl-3">
                     <div class="card">
@@ -108,89 +108,16 @@
                         </a>
                     </div>
                 </div>
-            </div>
+            </div> --}}
             @endif
 
 
 
-            @if (Auth::user()->role_id == 2)
 
-                <div class="row">
-                    <div class="col-xl-6">
-                        <div class="card m-b-30">
-                            <div class="card-body">
-                                <h4 class="mt-0 header-title mb-4">In Time</h4>
-
-                                <form action="{{ route('set.intime') }}" method="POST">
-                                    @csrf
-
-                                    <div class="d-flex">
-                                        <input type="time" class="form-control" name="in_time" value="{{ $attendence->in_time ?? ""}}" required readonly>
-                                        {{-- <button class="btn btn-sm btn-primary ml-2" type="submit">Submit</button> --}}
-                                    </div>
-                                </form>
-                            </div>
-                        </div>
-                    </div>
-
-
-                    <div class="col-xl-6">
-                        <div class="card m-b-30">
-                            <div class="card-body">
-                                <h4 class="mt-0 header-title mb-4">Out Time</h4>
-
-                                <form action="{{ route('set.outtime') }}" method="POST">
-                                    @csrf
-
-                                    <div class="d-flex">
-                                        <input type="time" class="form-control" name="out_time" value="{{ $attendence->out_time ?? ""}}" required readonly>
-                                        {{-- <button class="btn btn-sm btn-primary ml-2" type="submit">Submit</button> --}}
-                                    </div>
-                                </form>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="col-md-12">
-                        @if (empty($attendence))
-                            <div class="time-section d-flex justify-content-center mt-5">
-                                <form action="{{ route('set.intime') }}" method="POST" id="inTimeForm">
-                                    @csrf
-
-                                    <div class="btn-content">
-                                        <button class="in-time-btn btn btn-primary shadow" type="submit" id="inTimeBtn">In Time</button>
-
-                                        <button class="in-time-btn btn btn-primary shadow" type="button" disabled style="display: none;" id="inTimeLoadingBtn">
-                                            <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-                                            Checking...
-                                        </button>
-                                    </div>
-                                </form>
-                            </div>
-                        @else
-                            <div class="time-section d-flex justify-content-center mt-5" id="outTimeSection">
-                                <form action="{{ route('set.outtime') }}" method="POST" id="outTimeForm">
-                                    @csrf
-
-                                    <div class="btn-content">
-                                        <button class="in-time-btn btn btn-danger shadow" {{$attendence->out_time ? 'disabled' : '' }} id="outTimeBtn">Out Time</button>
-
-                                        <button class="in-time-btn btn btn-danger shadow" type="button" disabled style="display: none;" id="outTimeLoadingBtn">
-                                            <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-                                            Checking...
-                                        </button>
-                                    </div>
-                                </form>
-                            </div>
-                        @endif
-                    </div>
-                </div>
-                <!-- end row -->
-            @endif
 
             @if (Auth::user()->role_id == 1)
             <!-- START ROW -->
-            <div class="row">
+            {{-- <div class="row">
                 <div class="col-xl-12">
                     <div class="card m-b-30">
                         <div class="card-body">
@@ -260,7 +187,7 @@
                         </div>
                     </div>
                 </div>
-            </div>
+            </div> --}}
             <!-- END ROW -->
             @endif
         </div>

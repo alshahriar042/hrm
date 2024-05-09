@@ -20,7 +20,7 @@
                 @if (Auth::user()->hasPermission('roles.index') || Auth::user()->hasPermission('users.index'))
                 <li class="menu-title">Authorization</li>
                 @endif
-{{--
+
                 @if (Auth::user()->hasPermission('roles.index'))
                     <li class="{{ $route == 'roles.edit' || $route == 'roles.create' || $route == 'roles.show' ? 'mm-active' : '' }}">
                         <a href="{{ route('roles.index') }}" class="waves-effect {{ $route == 'roles.edit' || $route == 'roles.create' || $route == 'roles.show' ? 'mm-active' : '' }}">
@@ -37,7 +37,7 @@
                             <span> User</span>
                         </a>
                     </li>
-                @endif --}}
+                @endif
 
                 @if (Auth::user()->hasPermission('attendance.index') || Auth::user()->hasPermission('my.attendance') || Auth::user()->hasPermission('reconciliations.index') || Auth::user()->hasPermission('pending.reconciliation'))
                 <li class="menu-title">main</li>
@@ -60,13 +60,13 @@
                             </li>
                         @endif
 
-                        @if (Auth::user()->hasPermission('my.attendance') || Auth::user()->hasPermission('my.attendance.report'))
+                        {{-- @if (Auth::user()->hasPermission('my.attendance') || Auth::user()->hasPermission('my.attendance.report'))
                             @if ($user->role_id == 2)
                                 <li class="{{ $route == 'my.attendance' || $route == 'my.attendance.report' ? 'mm-active' : '' }}">
                                     <a href="{{ route('my.attendance') }}">My Attendance</a>
                                 </li>
                             @endif
-                        @endif
+                        @endif --}}
                     </ul>
                 </li>
                 @endif

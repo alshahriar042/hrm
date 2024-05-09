@@ -24,7 +24,7 @@ class UserSeeder extends Seeder
             'status'   => true
         ]);
 
-        $adminRoleId = Role::where('slug', 'admin')->first()->id;
+        $employeeRoleId = Role::where('slug', 'employee')->first()->id;
 
         // Array of user data
         $users = [
@@ -54,9 +54,10 @@ class UserSeeder extends Seeder
             User::updateOrCreate(
                 ['emp_id' => $userData['id']],
                 [
-                    'role_id'  => $adminRoleId,
+                    'role_id'  => $employeeRoleId,
                     'name'     => $userData['name'],
-                    'email'    => strtolower(str_replace(' ', '.', $userData['name'])) . '@example.com',
+
+                    'email'    => strtolower(str_replace(' ', '.', $userData['name'])) . '@nextgenitltd.com',
                     'password' => Hash::make('password'),
                     'status'   => true
                 ]
