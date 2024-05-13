@@ -62,6 +62,9 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('my-attendance', [AttendanceController::class, "myAttendance"])->name('my.attendance');
     Route::get('my-attendance/report', [AttendanceController::class, "myAttendanceReport"])->name('my.attendance.report');
     Route::get('machine-attendance', [AttendanceController::class, "attendence"])->name('machine.attendance.report');
+    Route::post('save-remark', [AttendanceController::class, "saveRemarks"])->name('save.remark');
+    Route::post('save-recon', [AttendanceController::class, "saveRecon"])->name('save.recon');
+
 
     Route::resource('reconciliations', ReconciliationController::class);
     Route::get('pending-reconciliation', [ReconciliationController::class, "pendingReconciliation"])->name('pending.reconciliation');

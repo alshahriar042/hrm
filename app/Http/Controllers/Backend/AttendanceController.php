@@ -7,9 +7,10 @@ use App\Models\User;
 use App\Models\Attendance;
 use Carbon\CarbonInterval;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
 
 class AttendanceController extends Controller
@@ -27,17 +28,61 @@ class AttendanceController extends Controller
     {
         // Gate::authorize('attendance.index');
 
-         $user = Auth::user();
+        $user = Auth::user();
 
         if ($user->role_id == 2) {
-            $data = DB::table('machine_attendances')->where('user_id',$user->emp_id)->orderBy('date','DESC') ->get();
-        }else{
+            $data = DB::table('machine_attendances')->where('user_id', $user->emp_id)->orderBy('date', 'DESC')->get();
+        } else {
 
-              $data = DB::table('machine_attendances')->orderBy('date','DESC') ->get();
+            $data = DB::table('machine_attendances')->orderBy('date', 'DESC')->get();
         }
 
-             return view('backend.attendence.machine_atttendence', compact('data'));
+        return view('backend.attendence.machine_atttendence', compact('data'));
     }
+
+
+    public function saveRemarks(Request $request)
+    {
+        //  return $request->all();
+        try{
+            log::info($request->employee_id);
+        log::info($request->check_in_remark);
+        log::info($request->check_out_remark);
+
+
+
+        DB::table('machine_attendances')
+        ->where('id', $request->employee_id)
+        ->update(['check_in_remark' => $request->check_in_remark,
+        'check_out_remark' => $request->check_out_remark]);
+
+        Log::info($request->employee_id);
+
+
+        return response()->json(['message' => ' data Update successfully'], 200);
+        }catch(\Exception $e){
+            return response()->json(['message' => $e->getMessage()], 422);
+
+        }
+
+    }
+    public function saveRecon(Request $request)
+    {
+        try{
+
+        DB::table('machine_attendances')
+        ->where('id', $request->employee_id)
+        ->update(['check_in_remark' => $request->check_in,
+        'check_out_remark' => $request->check_out]);
+
+        return response()->json(['message' => ' data Update successfully'], 200);
+        }catch(\Exception $e){
+            return response()->json(['message' => $e->getMessage()], 422);
+
+        }
+
+    }
+
 
 
     public function attendanceDetails($employeeId)
@@ -45,12 +90,12 @@ class AttendanceController extends Controller
         Gate::authorize('attendance.details');
 
         $attendances = Attendance::selectRaw('MONTH(created_at) as month, YEAR(created_at) as year, COUNT(*) as attendance_count')
-                        ->where('employee_id', $employeeId)
-                        ->groupBy('year', 'month')
-                        ->orderBy('year', 'desc')
-                        ->orderBy('month', 'desc')
-                        ->get();
-        return view('backend.attendence.attendence_details', compact('attendances','employeeId'));
+            ->where('employee_id', $employeeId)
+            ->groupBy('year', 'month')
+            ->orderBy('year', 'desc')
+            ->orderBy('month', 'desc')
+            ->get();
+        return view('backend.attendence.attendence_details', compact('attendances', 'employeeId'));
     }
 
     protected function getAlldays($year, $month)
@@ -58,7 +103,7 @@ class AttendanceController extends Controller
         $daysInMonth = Carbon::createFromDate($year, $month, 1)->daysInMonth;
 
         $result = [];
-        for($i = 1; $i <= $daysInMonth; $i++) {
+        for ($i = 1; $i <= $daysInMonth; $i++) {
             $date = Carbon::createFromDate($year, $month, $i)->format("Y-m-d");
 
             $result[$date] = [
@@ -94,19 +139,19 @@ class AttendanceController extends Controller
         $days = $this->getAlldays($year, $month);
 
         $attendanceReports = Attendance::with('user')->whereYear('created_at', $year)
-                        ->whereMonth('created_at', $month)
-                        ->where('employee_id', $request->employee_id)
-                        ->get();
+            ->whereMonth('created_at', $month)
+            ->where('employee_id', $request->employee_id)
+            ->get();
 
         $employee = User::findOrFail($request->employee_id);
 
         $daysInMonth = Carbon::createFromDate($year, $month, 1)->daysInMonth;
 
-        foreach($attendanceReports as $attendanceReport) {
+        foreach ($attendanceReports as $attendanceReport) {
             $days[$attendanceReport->created_at->format("Y-m-d")]["inTime"] = $attendanceReport->in_time;
             $days[$attendanceReport->created_at->format("Y-m-d")]["outTime"] = $attendanceReport->out_time;
 
-            if(isset($attendanceReport->in_time)) {
+            if (isset($attendanceReport->in_time)) {
                 $days[$attendanceReport->created_at->format("Y-m-d")]["isPresent"] = true;
                 $days[$attendanceReport->created_at->format("Y-m-d")]["isAbsent"] = false;
             }
@@ -129,7 +174,7 @@ class AttendanceController extends Controller
             $officeWorkingHours = new Carbon("08:00:00"); // TODO:: Make it dynamic
             $totalWorkingHours = Carbon::parse($startTime->diff($endTime)->format('%H:%I:%S'));
 
-            if (strtotime($officeWorkingHours) < strtotime($totalWorkingHours) ) {
+            if (strtotime($officeWorkingHours) < strtotime($totalWorkingHours)) {
                 $days[$attendanceReport->created_at->format("Y-m-d")]["overtime"] = $officeWorkingHours->diff($totalWorkingHours)->format("%H:%I:%S"); // TODO:: Calculate for only positive times
                 $totalOvertimeMinutes += $officeWorkingHours->diffInMinutes($totalWorkingHours);
             }
@@ -142,7 +187,7 @@ class AttendanceController extends Controller
         $totalLateHours = $this->minutesToHour($totalLateMinutes);
         $totalOvertimeHours = $this->minutesToHour($totalOvertimeMinutes);
 
-        return view('backend.attendence.attendence_report', compact('attendanceReports','employee','daysInMonth','year','month', 'days', 'totalWorkingHours','totalLateHours', 'totalOvertimeHours'));
+        return view('backend.attendence.attendence_report', compact('attendanceReports', 'employee', 'daysInMonth', 'year', 'month', 'days', 'totalWorkingHours', 'totalLateHours', 'totalOvertimeHours'));
     }
 
     /**
@@ -161,13 +206,13 @@ class AttendanceController extends Controller
 
         $employeeId = Auth::user()->id;
         $attendances = Attendance::selectRaw('MONTH(created_at) as month, YEAR(created_at) as year, COUNT(*) as attendance_count')
-                        ->where('employee_id', $employeeId)
-                        ->groupBy('year', 'month')
-                        ->orderBy('year', 'desc')
-                        ->orderBy('month', 'desc')
-                        ->get();
+            ->where('employee_id', $employeeId)
+            ->groupBy('year', 'month')
+            ->orderBy('year', 'desc')
+            ->orderBy('month', 'desc')
+            ->get();
 
-        return view('backend.attendence.my_attendence_details', compact('attendances','employeeId'));
+        return view('backend.attendence.my_attendence_details', compact('attendances', 'employeeId'));
     }
 
     public function myAttendanceReport(Request $request)
@@ -190,19 +235,19 @@ class AttendanceController extends Controller
         $days = $this->getAlldays($year, $month);
 
         $attendanceReports = Attendance::with('user')->whereYear('created_at', $year)
-                        ->whereMonth('created_at', $month)
-                        ->where('employee_id', $user->id)
-                        ->get();
+            ->whereMonth('created_at', $month)
+            ->where('employee_id', $user->id)
+            ->get();
 
         $employee = User::findOrFail($user->id);
 
         $daysInMonth = Carbon::createFromDate($year, $month, 1)->daysInMonth;
 
-        foreach($attendanceReports as $attendanceReport) {
+        foreach ($attendanceReports as $attendanceReport) {
             $days[$attendanceReport->created_at->format("Y-m-d")]["inTime"] = $attendanceReport->in_time;
             $days[$attendanceReport->created_at->format("Y-m-d")]["outTime"] = $attendanceReport->out_time;
 
-            if(isset($attendanceReport->in_time)) {
+            if (isset($attendanceReport->in_time)) {
                 $days[$attendanceReport->created_at->format("Y-m-d")]["isPresent"] = true;
                 $days[$attendanceReport->created_at->format("Y-m-d")]["isAbsent"] = false;
             }
@@ -225,7 +270,7 @@ class AttendanceController extends Controller
             $officeWorkingHours = new Carbon("08:00:00"); // TODO:: Make it dynamic
             $totalWorkingHours = Carbon::parse($startTime->diff($endTime)->format('%H:%I:%S'));
 
-            if (strtotime($officeWorkingHours) < strtotime($totalWorkingHours) ) {
+            if (strtotime($officeWorkingHours) < strtotime($totalWorkingHours)) {
                 $days[$attendanceReport->created_at->format("Y-m-d")]["overtime"] = $officeWorkingHours->diff($totalWorkingHours)->format("%H:%I:%S"); // TODO:: Calculate for only positive times
                 $totalOvertimeMinutes += $officeWorkingHours->diffInMinutes($totalWorkingHours);
             }
@@ -238,6 +283,6 @@ class AttendanceController extends Controller
         $totalLateHours = $this->minutesToHour($totalLateMinutes);
         $totalOvertimeHours = $this->minutesToHour($totalOvertimeMinutes);
 
-        return view('backend.attendence.my_attendence_report', compact('attendanceReports','employee','daysInMonth','year','month', 'days', 'totalWorkingHours','totalLateHours', 'totalOvertimeHours'));
+        return view('backend.attendence.my_attendence_report', compact('attendanceReports', 'employee', 'daysInMonth', 'year', 'month', 'days', 'totalWorkingHours', 'totalLateHours', 'totalOvertimeHours'));
     }
 }
