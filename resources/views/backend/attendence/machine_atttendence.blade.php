@@ -69,13 +69,19 @@
                                                         N/A
                                                     @endif
                                                 </td>
+
                                                 <td class="text-center">
+                                                    @if (!$employee->check_in_remark || !$employee->check_out_remark)
                                                     <a href="#" class="btn btn-primary btn-sm openModal"
                                                         title="Attendance Details" data-toggle="modal"
                                                         data-target="#remarkModal" data-id="{{ $employee->id }}">
                                                         <i class="fa fa-list"></i>
                                                         <span>Remark</span>
                                                     </a>
+
+
+                                                    @endif
+
 
                                                     <!-- Reconciliation Button -->
                                                     <a href="#" class="btn btn-primary btn-sm openModalre"

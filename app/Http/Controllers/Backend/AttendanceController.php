@@ -48,15 +48,15 @@ class AttendanceController extends Controller
 
 
         $exting =   DB::table('machine_attendances')->where('id', $request->employee_id)->first();
-        $check_in = $request->check_in_remark ?? $exting->check_in_remark ;
-        $check_out = $request->check_out_remark ?? $exting->check_out_remark ;
+        $check_in = $request->check_in_remark ? $request->check_in_remark: $exting->check_in_remark ;
+        $check_out = $request->check_out_remark ? $request->check_out_remark : $exting->check_out_remark ;
 
 
 
         DB::table('machine_attendances')
         ->where('id', $request->employee_id)
-        ->update(['check_in_remark' => $request->check_in,
-        'check_out_remark' => $request->check_out]);
+        ->update(['check_in_remark' => $check_in,
+        'check_out_remark' => $check_out]);
 
 
 
