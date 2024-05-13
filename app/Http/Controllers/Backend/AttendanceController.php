@@ -43,20 +43,17 @@ class AttendanceController extends Controller
 
     public function saveRemarks(Request $request)
     {
-        //  return $request->all();
         try{
-            log::info($request->employee_id);
-        log::info($request->check_in_remark);
-        log::info($request->check_out_remark);
 
+            $check_in = $request->check_in_remark ??  "";
+            $check_out = $request->check_out_remark ??  "";
 
 
         DB::table('machine_attendances')
         ->where('id', $request->employee_id)
-        ->update(['check_in_remark' => $request->check_in_remark,
-        'check_out_remark' => $request->check_out_remark]);
+        ->update(['check_in_remark' => $request->check_in,
+        'check_out_remark' => $request->check_out]);
 
-        Log::info($request->employee_id);
 
 
         return response()->json(['message' => ' data Update successfully'], 200);
