@@ -45,8 +45,12 @@ class AttendanceController extends Controller
     {
         try{
 
-            $check_in = $request->check_in_remark ??  "";
-            $check_out = $request->check_out_remark ??  "";
+
+
+        $exting =   DB::table('machine_attendances')->where('id', $request->employee_id)->first();
+        $check_in = $request->check_in_remark ?? $exting->check_in_remark ;
+        $check_out = $request->check_out_remark ?? $exting->check_out_remark ;
+
 
 
         DB::table('machine_attendances')
