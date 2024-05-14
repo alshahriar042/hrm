@@ -231,8 +231,8 @@
                 dataType: 'json',
                 data: {
                     employee_id: employeeId,
-                    check_in_remark: checkIn,
-                    check_out_remark: checkOut,
+                    check_in: checkIn,
+                    check_out: checkOut,
                     _token: '{{ csrf_token() }}'
                 },
                 success: function(response) {

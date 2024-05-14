@@ -7,6 +7,7 @@ use App\Models\User;
 use App\Models\Attendance;
 use Carbon\CarbonInterval;
 use Illuminate\Http\Request;
+use App\Models\Reconciliation;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
@@ -71,10 +72,14 @@ class AttendanceController extends Controller
     {
         try{
 
-        DB::table('machine_attendances')
-        ->where('id', $request->employee_id)
-        ->update(['check_in_remark' => $request->check_in,
-        'check_out_remark' => $request->check_out]);
+            Reconciliation::create([
+                'date'  => date('Y-m-d', strtotime($request->date)),
+                'in_time' => $request->check_in,
+                'out_time'  => $request->check_out,
+                'employee_id' => $request->employeeId,
+                'reason' => $request->reason
+            ]);
+
 
         return response()->json(['message' => ' data Update successfully'], 200);
         }catch(\Exception $e){
