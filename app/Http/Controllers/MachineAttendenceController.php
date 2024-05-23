@@ -21,7 +21,7 @@ class MachineAttendenceController extends Controller
 
         if ($zk->connect()) {
 
-            $attendanceArray = $zk->getAttendance();
+             $attendanceArray = $zk->getAttendance();
             $attendanceJson = json_encode($attendanceArray);
             $attendanceData = json_decode($attendanceJson, true);
 
@@ -29,7 +29,7 @@ class MachineAttendenceController extends Controller
                 // Retrieve the attendance record for the user on the specified date
                 $attendance = DB::table('machine_attendances')
                     ->where('user_id', $data['id'])
-                    ->where('date', Carbon::parse($data['timestamp'])->toDateString())
+                    ->where('date', '2024-05-21')
                     ->first();
 
                 if ($attendance) {
@@ -51,6 +51,8 @@ class MachineAttendenceController extends Controller
                     }
                 }
             }
+
+            $zk->clearAttendance();
             return response()->json(['message' => 'Attendance data inserted successfully'], 200);
 
 
