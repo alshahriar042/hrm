@@ -68,8 +68,9 @@
                                             <td>{{ $reconciliation->employee->name }}</td>
                                             <td>{{ $reconciliation->employee->designation }}</td>
                                             @endif
-                                            <td>{{ date('h:i A', strtotime($reconciliation->in_time)) }}</td>
-                                            <td>{{ date('h:i A', strtotime($reconciliation->out_time)) }}</td>
+                                            <td>{{ $reconciliation->in_time ? date('h:i A', strtotime($reconciliation->in_time)) : 'N/A' }}</td>
+                                            <td>{{ $reconciliation->out_time ? date('h:i A', strtotime($reconciliation->out_time)) : 'N/A' }}</td>
+
                                             <td>{{ date('d-M-Y', strtotime($reconciliation->date)) }}</td>
                                             @if (Auth::user()->role_id == 2)
                                             <td>{{ @$reconciliation->approvedBy->name }}</td>

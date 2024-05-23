@@ -83,13 +83,12 @@
                                                     @endif
 
 
-                                                    <!-- Reconciliation Button -->
-                                                    <a href="#" class="btn btn-primary btn-sm openModalre"
-                                                        title="Attendance Details" data-toggle="modal"
-                                                        data-target="#reconciliationModal" data-id={{ $employee->id }}>
-                                                        <i class="fa fa-list"></i>
-                                                        <span>Reconciliation</span>
-                                                    </a>
+                                                    <a href="{{ route('reconciliations.index') }}" class="btn btn-primary btn-sm openModalre"
+                                                    title="Attendance Details">
+                                                    <i class="fa fa-list"></i>
+                                                    <span>Reconciliation</span>
+                                                </a>
+
                                                 </td>
                                             </tr>
                                         @endforeach

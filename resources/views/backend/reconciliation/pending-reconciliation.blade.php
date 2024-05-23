@@ -46,14 +46,15 @@
                                 </thead>
                                 <tbody class="text-center">
                                     @foreach ($pending_reconciliations as $pending_reconciliation)
-                                    {{-- @dd($pending_reconciliation) --}}
+                                    @dd($pending_reconciliation)
                                         <tr>
                                             <td>{{ $loop->iteration }}</td>
                                             {{-- <td>{{ @$pending_reconciliation->employee->emp_id }}</td> --}}
                                             <td>{{ @$pending_reconciliation->employee->name }}</td>
                                             {{-- <td>{{ @$pending_reconciliation->employee->designation }}</td> --}}
-                                            <td>{{ date('h:i A', strtotime($pending_reconciliation->in_time)) }}</td>
-                                            <td>{{ date('h:i A', strtotime($pending_reconciliation->out_time)) }}</td>
+                                            <td>{{ $pending_reconciliation->in_time ? date('h:i A', strtotime($pending_reconciliation->in_time)) : 'N/A' }}</td>
+                                            <td>{{ $pending_reconciliation->out_time ? date('h:i A', strtotime($pending_reconciliation->out_time)) : 'N/A' }}</td>
+
                                             <td>{{ date('d-M-Y', strtotime($pending_reconciliation->date)) }}</td>
                                             <td>
                                                 @if ($pending_reconciliation->approval_status == "pending")
