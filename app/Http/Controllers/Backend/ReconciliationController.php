@@ -25,10 +25,10 @@ class ReconciliationController extends Controller
         $user = Auth::user();
 
         if ($user->role_id == 2) {
-            $reconciliations = Reconciliation::where('employee_id',$user->id)->orderBy('id','DESC')->get();
+            $reconciliations = Reconciliation::where('employee_id', $user->emp_id)->orderBy('id', 'DESC')->get();
             return view('backend.reconciliation.index', compact('reconciliations'));
         } else {
-            $reconciliations = Reconciliation::where('approval_status','!=','pending')->orderBy('id','DESC')->get();
+            $reconciliations = Reconciliation::where('approval_status', '!=', 'pending')->orderBy('id', 'DESC')->get();
             return view('backend.reconciliation.index', compact('reconciliations'));
         }
     }
@@ -55,8 +55,7 @@ class ReconciliationController extends Controller
         Gate::authorize('reconciliations.create');
 
         $this->validate($request, [
-            'in_time'  => 'date_format:H:i',
-            'out_time' => 'date_format:H:i|after:in_time',
+
             'date'     => 'required|date_format:Y-m-d',
         ]);
 
@@ -65,7 +64,7 @@ class ReconciliationController extends Controller
                 'date'  => date('Y-m-d', strtotime($request->date)),
                 'in_time' => $request->in_time,
                 'out_time'  => $request->out_time,
-                'employee_id' => Auth::id(),
+                'employee_id' => Auth::user()->emp_id,
                 'reason' => $request->reason
             ]);
 
@@ -76,7 +75,6 @@ class ReconciliationController extends Controller
             notify()->error('Reconciliation Create Failed', 'Error');
             return back();
         }
-
     }
 
     /**
@@ -128,7 +126,7 @@ class ReconciliationController extends Controller
     {
         Gate::authorize('pending.reconciliation');
 
-        $pending_reconciliations = Reconciliation::where('approval_status','pending')->orderBy('id','DESC')->get();
+        $pending_reconciliations = Reconciliation::where('approval_status', 'pending')->orderBy('id', 'DESC')->get();
         return view('backend.reconciliation.pending-reconciliation', compact('pending_reconciliations'));
     }
 
@@ -140,18 +138,28 @@ class ReconciliationController extends Controller
 
         try {
             $reconciliation = Reconciliation::findOrFail($id);
-            $attendence     = Attendance::where('employee_id', $reconciliation->employee_id)->whereDate('created_at', $reconciliation->date)->first();
 
-            if ($attendence != null) {
-                $attendence->update([
-                    'in_time' => $reconciliation->in_time,
-                    'out_time' => $reconciliation->out_time
-                ]);
+            $attendance = DB::table('machine_attendances')
+                ->where('user_id', $reconciliation->employee_id)
+                ->where('date', $reconciliation->date)
+                ->first();
 
-                $reconciliation->update([
-                    'action_by' => Auth::user()->id,
-                    'approval_status' => "approved"
-                ]);
+            if ($attendance != null) {
+                $checkInDateTime = null;
+                $checkOutDateTime = null;
+
+                if ($reconciliation->in_time == null && $reconciliation->out_time != null) {
+                    $checkInDateTime = $attendance->check_in;
+                    $checkOutDateTime = $reconciliation->date . ' ' . $reconciliation->out_time;
+                } elseif ($reconciliation->in_time != null && $reconciliation->out_time == null) {
+                    $checkInDateTime = $reconciliation->date . ' ' . $reconciliation->in_time;
+                    $checkOutDateTime =  $attendance->check_out;
+                } elseif ($reconciliation->in_time != null && $reconciliation->out_time != null) {
+                    $checkInDateTime = $reconciliation->date . ' ' . $reconciliation->in_time;
+                    $checkOutDateTime = $reconciliation->date . ' ' . $reconciliation->out_time;
+                }
+
+                $this->updateAttendanceAndReconciliation($attendance->id, $checkInDateTime, $checkOutDateTime, $reconciliation);
             } else {
                 notify()->warning('Date Not Found', 'Warning');
                 return back();
@@ -167,7 +175,21 @@ class ReconciliationController extends Controller
             notify()->error('Reconciliation Approve Failed', 'Error');
             return back();
         }
+    }
 
+    function updateAttendanceAndReconciliation($attendanceId, $checkInDateTime, $checkOutDateTime, $reconciliation)
+    {
+        DB::table('machine_attendances')
+            ->where('id', $attendanceId)
+            ->update([
+                'check_in' => $checkInDateTime,
+                'check_out' => $checkOutDateTime,
+            ]);
+
+        $reconciliation->update([
+            'action_by' => Auth::user()->emp_id,
+            'approval_status' => "approved"
+        ]);
     }
 
     public function rejectReconciliation(Request $request)
@@ -177,7 +199,7 @@ class ReconciliationController extends Controller
         try {
             $reconciliation = Reconciliation::findOrFail($request->reconciliation_id);
             $reconciliation->update([
-                'action_by' => Auth::user()->id,
+                'action_by' => Auth::user()->emp_id,
                 'remark' => $request->remark,
                 'approval_status' => "rejected"
             ]);

@@ -71,7 +71,7 @@
                 </li>
                 @endif
 
-{{--
+
                 @if (Auth::user()->hasPermission('reconciliations.index') || Auth::user()->hasPermission('reconciliations.create') || Auth::user()->hasPermission('pending.reconciliation'))
                 <li class="{{ $route == 'reconciliations.index' || $route == 'reconciliations.create' || $route == 'pending.reconciliation' ? 'mm-active' : '' }}">
                     <a href="javascript:void(0);" class="waves-effect {{ $route == 'reconciliations.index' || $route == 'reconciliations.create' || $route == 'pending.reconciliation' ? 'mm-active' : '' }}">
@@ -99,7 +99,7 @@
                     </ul>
                 </li>
                 @endif
-
+{{--
                 @if (Auth::user()->hasPermission('departments.index'))
                 <li class="menu-title">lookup</li>
                 @endif
