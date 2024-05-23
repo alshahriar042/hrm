@@ -46,7 +46,7 @@
                                 </thead>
                                 <tbody class="text-center">
                                     @foreach ($pending_reconciliations as $pending_reconciliation)
-                                    @dd($pending_reconciliation)
+                                    {{-- @dd($pending_reconciliation) --}}
                                         <tr>
                                             <td>{{ $loop->iteration }}</td>
                                             {{-- <td>{{ @$pending_reconciliation->employee->emp_id }}</td> --}}
