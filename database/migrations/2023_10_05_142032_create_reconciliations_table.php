@@ -15,8 +15,8 @@ return new class extends Migration
     {
         Schema::create('reconciliations', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('employee_id')->constrained('users')->onDelete('cascade');
-            $table->foreignId('action_by')->nullable()->constrained('users')->onDelete('cascade');
+            $table->unsignedBigInteger('employee_id')->nullable();
+            $table->unsignedBigInteger('action_by')->nullable();
             $table->time('in_time')->nullable();
             $table->time('out_time')->nullable();
             $table->date('date')->nullable();

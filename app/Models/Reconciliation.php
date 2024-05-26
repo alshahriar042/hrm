@@ -18,6 +18,6 @@ class Reconciliation extends Model
 
     public function approvedBy()
     {
-        return $this->belongsTo(User::class, 'action_by', 'id');
+        return $this->belongsTo(User::class, 'action_by', 'emp_id');
     }
 }
