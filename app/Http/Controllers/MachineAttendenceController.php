@@ -17,20 +17,22 @@ class MachineAttendenceController extends Controller
 
     public function index()
     {
-         $zk = new ZKTeco('203.96.226.122', 8000);
+        //  $zk = new ZKTeco('203.96.226.122', 8000);
+         $zk = new ZKTeco('10.10.10.11', 8000);
 
 
         if ($zk->connect()) {
 
-            $attendanceArray = $zk->getAttendance();
+           $attendanceArray = $zk->getAttendance();
             $attendanceJson = json_encode($attendanceArray);
             $attendanceData = json_decode($attendanceJson, true);
 
             foreach ($attendanceData as $data) {
                 // Retrieve the attendance record for the user on the specified date
-                $attendance = DB::table('machine_attendances')
+                     $attendance = DB::table('machine_attendances')
                     ->where('user_id', $data['id'])
                     ->where('date', Carbon::parse($data['timestamp'])->toDateString())
+                    // ->where('date', "2024-05-27")
                     ->first();
 
                 if ($attendance) {
@@ -52,8 +54,8 @@ class MachineAttendenceController extends Controller
                     }
                 }
             }
-            return response()->json(['message' => 'Attendance data inserted successfully'], 200);
-            $zk->clearAttendance();
+           return  response()->json(['message' => 'Attendance data inserted successfully'], 200);
+            // $zk->clearAttendance();
 
         }else{
             return response()->json(['message' => 'Machine Not Connected'], 422);
