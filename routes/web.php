@@ -1,9 +1,11 @@
 <?php
 
+use App\Http\Controllers\FirebaseController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Artisan;
 use App\Http\Controllers\Frontend\HomeController;
 use App\Http\Controllers\MachineAttendenceController;
+use App\Http\Controllers\WeeklyAttendenceController;
 
 /*
 |--------------------------------------------------------------------------
@@ -24,4 +26,9 @@ Route::get('/', function () {
 
 Route::get('/record', [MachineAttendenceController::class, 'userRecord'])->name('userRecord.attendence');
 Route::get('/attendence', [MachineAttendenceController::class, 'index'])->name('attendence');
+Route::get('/week', [WeeklyAttendenceController::class, 'calculateAttendance'])->name('calculateAttendance');
 
+
+
+
+Route::get('/send-notification', [FirebaseController::class, 'sendPushNotification']);
