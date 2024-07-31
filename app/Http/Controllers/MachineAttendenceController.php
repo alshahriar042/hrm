@@ -23,7 +23,7 @@ class MachineAttendenceController extends Controller
 
         if ($zk->connect()) {
 
-           $attendanceArray = $zk->getAttendance();
+         return   $attendanceArray = $zk->getAttendance();
             $attendanceJson = json_encode($attendanceArray);
             $attendanceData = json_decode($attendanceJson, true);
 
