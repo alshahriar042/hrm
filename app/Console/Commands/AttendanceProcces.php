@@ -31,7 +31,7 @@ class AttendanceProcces extends Command
      */
     public function handle()
     {
-        $zk = new ZKTeco('203.96.226.122', 8000);
+        $zk = new ZKTeco('10.10.10.24', 8000);
 
         if ($zk->connect()) {
 
