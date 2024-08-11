@@ -31,7 +31,7 @@ class AttendanceProcces extends Command
      */
     public function handle()
     {
-        $zk = new ZKTeco('10.10.10.37', 8000);
+        $zk = new ZKTeco('10.10.10.10', 8000);
 
         if ($zk->connect()) {
 
@@ -70,7 +70,9 @@ class AttendanceProcces extends Command
             $currentDate = Carbon::now()->toDateString();
             Log::info("Attendance records updated successfully for date: $currentDate.");
             $this->info('Attendance records updated successfully.');
+            $zk->clearAttendance();
         }
+        
 
     }
 }

@@ -27,11 +27,22 @@ class Kernel extends ConsoleKernel
         });
 
 //T
+        // $schedule->command('attendence:process')
+        //      ->everyFiveMinutes()
+        //      ->skip(function () {
+        //          return in_array(date('l'), ['Friday', 'Saturday']);
+        //      });
+        
         $schedule->command('attendence:process')
-             ->everyFiveMinutes()
-             ->skip(function () {
-                 return in_array(date('l'), ['Friday', 'Saturday']);
-             });
+        ->everyThirtyMinutes()
+        ->skip(function () {
+            return in_array(date('l'), ['Friday', 'Saturday']);
+        })
+        ->when(function () {
+            $currentTime = now()->format('H:i');
+            return $currentTime >= '10:00' && $currentTime <= '23:00';
+        });
+    
 
     }
 
