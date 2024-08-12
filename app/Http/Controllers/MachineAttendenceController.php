@@ -90,7 +90,7 @@ class MachineAttendenceController extends Controller
             ]);
         }
 
-        return response()->json(['message' => 'Attendance table populated with user data'], 200);
+        return response()->json(['message' => 'Attendance table populated with user record'], 200);
 
     }
 
