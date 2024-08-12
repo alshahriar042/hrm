@@ -31,7 +31,7 @@ class PopulateUserRecord extends Command
     public function handle()
     {
         $date = Carbon::now()->toDateString();
-        $users = User::where('id', '!=', 1)->get();
+        $users = User::where('id', '!=', 24)->get();
 
         foreach ($users as $user) {
 
