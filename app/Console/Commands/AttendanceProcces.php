@@ -72,7 +72,7 @@ class AttendanceProcces extends Command
             $this->info('Attendance records updated successfully.');
             $zk->clearAttendance();
         }
-        
+
 
     }
 }

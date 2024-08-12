@@ -3,6 +3,7 @@
 namespace App\Console;
 
 use App\Console\Commands\AttendanceProcces;
+use App\Console\Commands\CheckAttendance;
 use Illuminate\Console\Scheduling\Schedule;
 use App\Console\Commands\PopulateUserRecord;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
@@ -12,6 +13,7 @@ class Kernel extends ConsoleKernel
     protected $commands = [
        PopulateUserRecord::class,
        AttendanceProcces::class,
+       CheckAttendance::class,
     ];
     /**
      * Define the application's command schedule.
@@ -26,13 +28,8 @@ class Kernel extends ConsoleKernel
             return in_array(date('l'), ['Friday', 'Saturday']);
         });
 
-//T
-        // $schedule->command('attendence:process')
-        //      ->everyFiveMinutes()
-        //      ->skip(function () {
-        //          return in_array(date('l'), ['Friday', 'Saturday']);
-        //      });
-        
+
+
         $schedule->command('attendence:process')
         ->everyThirtyMinutes()
         ->skip(function () {
@@ -42,7 +39,11 @@ class Kernel extends ConsoleKernel
             $currentTime = now()->format('H:i');
             return $currentTime >= '10:00' && $currentTime <= '23:00';
         });
-    
+
+        // $schedule->command('attendance:check')->everyFiveSeconds();
+
+        $schedule->command('attendance:check')
+        ->everyMinute();
 
     }
 
