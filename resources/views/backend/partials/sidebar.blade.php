@@ -58,6 +58,9 @@
                             <li class="{{ $route == 'attendance.index' || $route == 'attendance.details' ||  $route == 'machine.attendance.report' || $route == 'attendance.report' ? 'mm-active' : '' }}">
                                 <a href="{{ route('machine.attendance.report') }}">Attendance</a>
                             </li>
+                            <li class="{{ $route == 'attendance.index' || $route == 'attendance.details' ||  $route == 'machine.attendance.report' || $route == 'attendance.report' ? 'mm-active' : '' }}">
+                                <a href="{{ route('attendance.form') }}">Weekly Attendance</a>
+                            </li>
                         @endif
 
                         {{-- @if (Auth::user()->hasPermission('my.attendance') || Auth::user()->hasPermission('my.attendance.report'))

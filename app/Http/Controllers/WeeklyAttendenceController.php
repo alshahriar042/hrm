@@ -8,67 +8,40 @@ use Illuminate\Support\Facades\DB;
 
 class WeeklyAttendenceController extends Controller
 {
+
+public function index(){
+
+    return view('backend.weeklyRecord.create');
+
+
+}
     public function calculateAttendance(Request $request)
     {
-        // $startDate = Carbon::parse($request->input('start_date'));
-        // $endDate = Carbon::parse($request->input('end_date'));
 
-        $startDate = Carbon::parse('2024-05-01');
-        $endDate = Carbon::parse('2024-06-09');
+        $startOfWeek = $request->startOfWeek;
+        $endOfWeek = $request->endOfWeek;
 
-        // Define office hours
-
-        $standardHours = 9;
-
-        // Fetch users and create a lookup array
-        $users = DB::table('users')->get();
-
-        // Initialize the userAttendances array
-        $userAttendances = [];
-        foreach ($users as $user) {
-            $userAttendances[$user->id] = [
-                'user_name' => $user->name,
-                'user_id' => $user->emp_id,
-                'total_working_hours' => 0,
-                'overtime' => 0,
-                'less_time' => 0
-            ];
-        }
-
-        // Fetch attendance data within the date range
-        $attendances = DB::table('machine_attendances')
-            //    ->whereBetween('date', [$startDate, $endDate])
+         $weeklyData = DB::table('machine_attendances as m')
+            ->join('users as u', 'm.user_id', '=', 'u.emp_id')
+            ->select(
+                'u.name',
+                'u.emp_id',
+                DB::raw("CONCAT(
+            FLOOR(SUM(LEAST(9 * 60, TIMESTAMPDIFF(MINUTE, m.check_in, m.check_out))) / 60),
+            ' hours ',
+            MOD(SUM(LEAST(9 * 60, TIMESTAMPDIFF(MINUTE, m.check_in, m.check_out))), 60),
+            ' minutes'
+        ) AS total_weekly_hours")
+            )
+            ->whereBetween('m.date', [$startOfWeek, $endOfWeek])
+            // ->whereNotNull('m.check_in')
+            // ->whereNotNull('m.check_out')
+            ->groupBy('u.name', 'u.emp_id')
+            ->orderBy('u.emp_id')
             ->get();
 
-        $dateCounts = DB::table('machine_attendances')
-            ->distinct()
-            ->count('date');
 
-        $totalHours = [];
+          return  view('backend.weeklyRecord.index', compact('weeklyData','startOfWeek','endOfWeek'));
 
-        foreach ($attendances as $record) {
-            if ($record->check_in && $record->check_out) {
-                $checkIn = strtotime($record->check_in);
-                $checkOut = strtotime($record->check_out);
-                $diff = $checkOut - $checkIn;
-                $hours = round($diff / 3600, 2);
-
-                if (isset($totalHours[$record->user_id])) {
-                    $totalHours[$record->user_id]['total_hours'] += round($hours);
-                } else {
-                    $totalHours[$record->user_id] = [
-                        'id' => $record->user_id,
-                        'user_name' => $record->user_name,
-                        'accual' =>  ($dateCounts-5)* 9,
-                        'total_hours' => round($hours),
-                    ];
-                }
-            }
-        }
-
-        // Re-index the array starting from 1
-        $totalHours = array_values($totalHours);
-
-        return $totalHours;
     }
 }
