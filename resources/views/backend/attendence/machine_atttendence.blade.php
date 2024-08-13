@@ -71,7 +71,7 @@
                                                 </td>
 
                                                 <td class="text-center">
-                                                    @if (!$employee->check_in_remark || !$employee->check_out_remark)
+                                                    @if (!$employee->check_in || !$employee->check_out)
                                                     <a href="#" class="btn btn-primary btn-sm openModal"
                                                         title="Attendance Details" data-toggle="modal"
                                                         data-target="#remarkModal" data-id="{{ $employee->id }}">
@@ -120,7 +120,11 @@
                 <div class="modal-body">
                     <!-- Your input fields for Remark -->
                     <input type="hidden" id="employeeId">
+                    <label for="">In time</label>
+                    <input type="time" id="checkInTime" class="form-control" placeholder="Check In Time">
                     <input type="text" id="checkInRemark" class="form-control" placeholder="Check In Remark">
+                    <label for="">Out time</label>
+                    <input type="time" id="checkOutTime" class="form-control" placeholder="Check Out Time">
                     <input type="text" id="checkOutRemark" class="form-control" placeholder="Check Out Remark">
                 </div>
                 <div class="modal-footer">
@@ -177,6 +181,10 @@
 
         function saveRemark() {
             var employeeId = $('#employeeId').val();
+
+            var checkInTime = $('#checkInTime').val();
+            var checkOutTime = $('#checkOutTime').val();
+
             var checkInRemark = $('#checkInRemark').val();
             var checkOutRemark = $('#checkOutRemark').val();
 
@@ -186,7 +194,9 @@
                 dataType: 'json',
                 data: {
                     employee_id: employeeId,
+                    check_in_time: checkInTime,
                     check_in_remark: checkInRemark,
+                    check_out_time: checkOutTime,
                     check_out_remark: checkOutRemark,
                     _token: '{{ csrf_token() }}'
                 },

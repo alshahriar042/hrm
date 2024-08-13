@@ -49,20 +49,25 @@ class AttendanceController extends Controller
 
 
         $exting =   DB::table('machine_attendances')->where('id', $request->employee_id)->first();
+        $check_in_time = $request->check_in_time ? $exting->date . ' ' .$request->check_in_time: $exting->check_in;
         $check_in = $request->check_in_remark ? $request->check_in_remark: $exting->check_in_remark ;
+        $check_out_time = $request->check_out_time ? $exting->date . ' ' .$request->check_out_time : $exting->check_out ;
         $check_out = $request->check_out_remark ? $request->check_out_remark : $exting->check_out_remark ;
-
-
 
         DB::table('machine_attendances')
         ->where('id', $request->employee_id)
-        ->update(['check_in_remark' => $check_in,
-        'check_out_remark' => $check_out]);
+        ->update([
+        'check_in' => $check_in_time,
+        'check_in_remark' => $check_in,
+        'check_out' =>$check_out_time,
+        'check_out_remark' => $check_out
+    ]);
 
 
 
         return response()->json(['message' => ' data Update successfully'], 200);
         }catch(\Exception $e){
+            Log::error($e->getMessage());
             return response()->json(['message' => $e->getMessage()], 422);
 
         }
