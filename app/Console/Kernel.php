@@ -11,9 +11,9 @@ use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 class Kernel extends ConsoleKernel
 {
     protected $commands = [
-       PopulateUserRecord::class,
-       AttendanceProcces::class,
-       CheckAttendance::class,
+        PopulateUserRecord::class,
+        AttendanceProcces::class,
+        CheckAttendance::class,
     ];
     /**
      * Define the application's command schedule.
@@ -23,28 +23,30 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        $schedule->command('user:record')->dailyAt('07:00')
-        	 ->skip(function () {
-            return in_array(date('l'), ['Friday', 'Saturday']);
-        });
+        $schedule->command('user:record')
+            ->dailyAt('07:00')
+            ->dailyAt('08:00')
+            ->dailyAt('09:00')
+            ->skip(function () {
+                return in_array(date('l'), ['Friday', 'Saturday']);
+            });
 
 
 
         $schedule->command('attendence:process')
-        ->everyFifteenMinutes()
-        ->skip(function () {
-            return in_array(date('l'), ['Friday', 'Saturday']);
-        })
-        ->when(function () {
-            $currentTime = now()->format('H:i');
-            return $currentTime >= '10:00' && $currentTime <= '23:00';
-        });
+            ->everyFifteenMinutes()
+            ->skip(function () {
+                return in_array(date('l'), ['Friday', 'Saturday']);
+            })
+            ->when(function () {
+                $currentTime = now()->format('H:i');
+                return $currentTime >= '10:00' && $currentTime <= '23:00';
+            });
 
         // $schedule->command('attendance:check')->everyFiveSeconds();
 
         $schedule->command('attendance:check')
-        ->everyMinute();
-
+            ->everyMinute();
     }
 
     /**
@@ -54,7 +56,7 @@ class Kernel extends ConsoleKernel
      */
     protected function commands()
     {
-        $this->load(__DIR__.'/Commands');
+        $this->load(__DIR__ . '/Commands');
 
         require base_path('routes/console.php');
     }
