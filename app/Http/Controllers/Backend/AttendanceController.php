@@ -58,8 +58,10 @@ class AttendanceController extends Controller
         ->where('id', $request->employee_id)
         ->update([
         'check_in' => $check_in_time,
+        'created_at' =>$check_in_time,
         'check_in_remark' => $check_in,
         'check_out' =>$check_out_time,
+        'updated_at' =>$check_out_time,
         'check_out_remark' => $check_out
     ]);
 

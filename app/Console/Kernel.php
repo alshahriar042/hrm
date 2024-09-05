@@ -32,7 +32,6 @@ class Kernel extends ConsoleKernel
             });
 
 
-
         $schedule->command('attendence:process')
             ->everyFifteenMinutes()
             ->skip(function () {

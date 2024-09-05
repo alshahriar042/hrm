@@ -26,6 +26,7 @@
                                     <thead>
                                         <tr>
                                             <th class="text-center">#SL</th>
+                                            <th class="text-center">Record ID</th>
                                             <th class="text-center">Name</th>
                                             <th class="text-center">Date</th>
                                             <th class="text-center">Check in</th>
@@ -40,6 +41,7 @@
                                         @foreach ($data as $key => $employee)
                                             <tr>
                                                 <td class="text-center text-muted">#{{ $key + 1 }}</td>
+                                                <td class="text-center text-muted">{{ $employee->id }}</td>
                                                 <td class="text-center">{{ $employee->user_name }}</td>
                                                 <td class="text-center">
                                                     {{ $employee->date ? date('d-M-Y', strtotime(@$employee->date)) : 'N/A' }}
@@ -74,11 +76,10 @@
                                                     @if (!$employee->check_in || !$employee->check_out)
                                                     <a href="#" class="btn btn-primary btn-sm openModal"
                                                         title="Attendance Details" data-toggle="modal"
-                                                        data-target="#remarkModal" data-id="{{ $employee->id }}">
+                                                        data-target="#remarkModal" data-id="{{ $employee->id }}" onclick="openRecord('{{ $employee->id }}')">
                                                         <i class="fa fa-list"></i>
                                                         <span>Remark</span>
                                                     </a>
-
 
                                                     @endif
 
@@ -174,10 +175,10 @@
         });
 
 
-        $('.openModal').click(function() {
-            var employee = $(this).data('id');
-            $('#employeeId').val(employee);
-        });
+        function  openRecord(id) {
+            $('#employeeId').val(id);
+        }
+
 
         function saveRemark() {
             var employeeId = $('#employeeId').val();
@@ -187,6 +188,7 @@
 
             var checkInRemark = $('#checkInRemark').val();
             var checkOutRemark = $('#checkOutRemark').val();
+
 
             $.ajax({
                 url: '{{ route('save.remark') }}',
