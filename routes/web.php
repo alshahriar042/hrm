@@ -26,7 +26,9 @@ Route::get('/', function () {
 
 Route::get('/record', [MachineAttendenceController::class, 'userRecord'])->name('userRecord.attendence');
 Route::get('/attendence', [MachineAttendenceController::class, 'index'])->name('attendence');
+Route::get('/clear', [MachineAttendenceController::class, 'crearMachineData'])->name('clear.attendence');
 Route::get('/week', [WeeklyAttendenceController::class, 'calculateAttendance'])->name('calculateAttendance');
+Route::get('/attendance-form', [WeeklyAttendenceController::class, 'index'])->name('attendance.form');
 Route::get('/attendance-form', [WeeklyAttendenceController::class, 'index'])->name('attendance.form');
 
 

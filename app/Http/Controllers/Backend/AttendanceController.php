@@ -66,7 +66,6 @@ class AttendanceController extends Controller
     ]);
 
 
-
         return response()->json(['message' => ' data Update successfully'], 200);
         }catch(\Exception $e){
             Log::error($e->getMessage());

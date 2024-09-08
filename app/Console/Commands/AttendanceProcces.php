@@ -65,7 +65,7 @@ class AttendanceProcces extends Command
                     }
                 }
             }
-            $zk->clearAttendance();
+            // $zk->clearAttendance();
 
             $currentDate = Carbon::now()->toDateString();
             Log::info("Attendance records updated successfully for date: $currentDate.");

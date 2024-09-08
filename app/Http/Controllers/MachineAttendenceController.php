@@ -18,10 +18,11 @@ class MachineAttendenceController extends Controller
     public function index()
     {
         //  $zk = new ZKTeco('203.96.226.122', 8000);
-         $zk = new ZKTeco('10.10.10.10', 8000);
+        $zk = new ZKTeco('10.10.10.10', 8000);
 
 
         if ($zk->connect()) {
+
 
             $attendanceArray = $zk->getAttendance();
             $attendanceJson = json_encode($attendanceArray);
@@ -29,7 +30,7 @@ class MachineAttendenceController extends Controller
 
             foreach ($attendanceData as $data) {
                 // Retrieve the attendance record for the user on the specified date
-                     $attendance = DB::table('machine_attendances')
+                $attendance = DB::table('machine_attendances')
                     ->where('user_id', $data['id'])
                     ->where('date', Carbon::parse($data['timestamp'])->toDateString())
                     // ->where('date', "2024-05-27")
@@ -37,45 +38,45 @@ class MachineAttendenceController extends Controller
 
                 if ($attendance) {
                     // Update check-in time if not already set and type is 0 (for check-in)
-                    if (($data['type'] == 0) && ($attendance->check_in ==null)) {
+                    if (($data['type'] == 0) && ($attendance->check_in == null)) {
                         DB::table('machine_attendances')
                             ->where('id', $attendance->id)
-                            ->update(['check_in' => $data['timestamp'],
-                            'created_at' => $data['timestamp']]);
+                            ->update([
+                                'check_in' => $data['timestamp'],
+                                'created_at' => $data['timestamp']
+                            ]);
                     }
 
                     // Update check-out time always
                     if ($data['type'] == 1) {
                         DB::table('machine_attendances')
                             ->where('id', $attendance->id)
-                            ->update(['check_out' => $data['timestamp'],
-                                  'updated_at' => $data['timestamp']]);
-
+                            ->update([
+                                'check_out' => $data['timestamp'],
+                                'updated_at' => $data['timestamp']
+                            ]);
                     }
                 }
             }
-            $zk->clearAttendance();
-           return  response()->json(['message' => 'Attendance data inserted successfully'], 200);
-
-        }else{
+            // $zk->clearAttendance();
+            return  response()->json(['message' => 'Attendance data inserted successfully'], 200);
+        } else {
             return response()->json(['message' => 'Machine Not Connected'], 422);
-
         }
-
-
     }
 
 
-    public function userRecord(){
+    public function userRecord()
+    {
         $date = Carbon::now()->toDateString();
         $users = User::where('id', '!=', 24)->get();
 
         foreach ($users as $user) {
 
             $existingAttendance = DB::table('machine_attendances')
-            ->where('user_id', $user->emp_id)
-            ->where('date', $date)
-            ->exists();
+                ->where('user_id', $user->emp_id)
+                ->where('date', $date)
+                ->exists();
 
             if ($existingAttendance) {
                 continue;
@@ -91,8 +92,23 @@ class MachineAttendenceController extends Controller
         }
 
         return response()->json(['message' => 'Attendance table populated with user record'], 200);
-
     }
 
+    public function crearMachineData()
+    {
 
+        $zk = new ZKTeco('10.10.10.10', 8000);
+
+
+        if ($zk->connect()) {
+
+            $zk->clearAttendance();
+
+            return response()->json(['message' => 'Attendance Cleared'], 200);
+
+        }
+
+        return response()->json(['message' => 'Machine Not Connected'], 422);
+
+    }
 }
