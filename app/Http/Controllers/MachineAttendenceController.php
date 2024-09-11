@@ -17,14 +17,12 @@ class MachineAttendenceController extends Controller
 
     public function index()
     {
-        //  $zk = new ZKTeco('203.96.226.122', 4370);
-           $zk = new ZKTeco('10.10.10.10', 8000);
-
+         $zk = new ZKTeco('203.96.226.122', 8000);
+        //    $zk = new ZKTeco('10.10.10.10', 8000);
 
         if ($zk->connect()) {
 
-
-            $attendanceArray = $zk->getAttendance();
+          return   $attendanceArray = $zk->getAttendance();
             $attendanceJson = json_encode($attendanceArray);
             $attendanceData = json_decode($attendanceJson, true);
 
