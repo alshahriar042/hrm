@@ -95,7 +95,7 @@ class MachineAttendenceController extends Controller
     public function crearMachineData()
     {
 
-        $zk = new ZKTeco('10.10.10.10', 8000);
+        $zk = new ZKTeco('203.96.226.122', 8000);
 
 
         if ($zk->connect()) {
