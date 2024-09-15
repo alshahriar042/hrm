@@ -24,9 +24,7 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule)
     {
         $schedule->command('user:record')
-            ->dailyAt('07:00')
-            ->dailyAt('08:00')
-            ->dailyAt('09:00')
+            ->dailyAt('08:50')
             ->skip(function () {
                 return in_array(date('l'), ['Friday', 'Saturday']);
             });
