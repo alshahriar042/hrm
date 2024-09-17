@@ -21,7 +21,7 @@ class PopulateUserRecord extends Command
      *
      * @var string
      */
-    protected $description ='Populate attendance table with all users for a specific date';
+    protected $description = 'Populate attendance table with all users for a specific date';
 
     /**
      * Execute the console command.
@@ -36,21 +36,19 @@ class PopulateUserRecord extends Command
         foreach ($users as $user) {
 
             $existingAttendance = DB::table('machine_attendances')
-            ->where('user_id', $user->emp_id)
-            ->where('date', $date)
-            ->exists();
+                ->where('user_id', $user->emp_id)
+                ->where('date', $date)
+                ->exists();
 
-            if ($existingAttendance) {
-                continue;
+            if (!$existingAttendance) {
+                DB::table('machine_attendances')->insert([
+                    'user_id' => $user->emp_id,
+                    'user_name' => $user->name,
+                    'check_in' => null,
+                    'check_out' => null,
+                    'date' => $date,
+                ]);
             }
-
-            DB::table('machine_attendances')->insert([
-                'user_id' => $user->emp_id,
-                'user_name' => $user->name,
-                'check_in' => null,
-                'check_out' => null,
-                'date' => $date,
-            ]);
         }
 
 
