@@ -51,8 +51,6 @@ class PopulateUserRecord extends Command
             }
         }
 
-
-
         $this->info('Attendance table populated with user data  for ' . $date);
     }
 }
