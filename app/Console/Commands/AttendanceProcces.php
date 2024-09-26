@@ -31,7 +31,8 @@ class AttendanceProcces extends Command
      */
     public function handle()
     {
-        $zk = new ZKTeco('10.10.10.10', 8000);
+        $zk = new ZKTeco('203.96.226.122', 8000);
+        $currentDate = Carbon::now()->toDateString();
 
         if ($zk->connect()) {
 
@@ -67,10 +68,13 @@ class AttendanceProcces extends Command
             }
             // $zk->clearAttendance();
 
-            $currentDate = Carbon::now()->toDateString();
             Log::info("Attendance records updated successfully for date: $currentDate.");
             $this->info('Attendance records updated successfully.');
             // $zk->clearAttendance();
+        }else{
+            Log::error("Machine not connected :$currentDate.");
+            $this->error('Machine not connected.');
+
         }
 
 
