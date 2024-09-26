@@ -40,17 +40,18 @@ class PopulateUserRecord extends Command
                 ->where('date', $date)
                 ->exists();
 
-            if (!$existingAttendance) {
-                DB::table('machine_attendances')->insert([
-                    'user_id' => $user->emp_id,
-                    'user_name' => $user->name,
-                    'check_in' => null,
-                    'check_out' => null,
-                    'date' => $date,
-                ]);
+            if ($existingAttendance) {
+                continue;
             }
-        }
 
+            DB::table('machine_attendances')->insert([
+                'user_id' => $user->emp_id,
+                'user_name' => $user->name,
+                'check_in' => null,
+                'check_out' => null,
+                'date' => $date,
+            ]);
+        }
         $this->info('Attendance table populated with user data  for ' . $date);
     }
 }

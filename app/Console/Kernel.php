@@ -23,27 +23,24 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        // $schedule->command('user:record')
-        //     ->dailyAt('08:50')
-        //     ->skip(function () {
-        //         return in_array(date('l'), ['Friday', 'Saturday']);
-        //     });
+        $schedule->command('user:record')
+            ->dailyAt('08:50')
+            ->skip(function () {
+                return in_array(date('l'), ['Friday', 'Saturday']);
+            });
 
+        $schedule->command('attendence:process')
+            ->everyFifteenMinutes()
+            ->skip(function () {
+                return in_array(date('l'), ['Friday', 'Saturday']);
+            })
+            ->when(function () {
+                $currentTime = now()->format('H:i');
+                return $currentTime >= '10:00' && $currentTime <= '23:00';
+            });
 
-        // $schedule->command('attendence:process')
-        //     ->everyFifteenMinutes()
-        //     ->skip(function () {
-        //         return in_array(date('l'), ['Friday', 'Saturday']);
-        //     })
-        //     ->when(function () {
-        //         $currentTime = now()->format('H:i');
-        //         return $currentTime >= '10:00' && $currentTime <= '23:00';
-        //     });
-
-        // $schedule->command('attendance:check')->everyFiveSeconds();
-
-        // $schedule->command('attendance:check')
-        //     ->everyMinute();
+        $schedule->command('attendance:check')
+            ->everyFifteenMinutes();
     }
 
     /**
